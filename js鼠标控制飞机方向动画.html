@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Document</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				background: url(img/sky.jpg);
+			}
+
+			#fly {
+				background: url(img/mes.png);
+				position: absolute;
+				top: 50%;
+				left: 50%;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			var fly = document.createElement('div');
+			fly.id = 'fly';
+			fly.style.width = '60px';
+			fly.style.height = '60px';
+			document.body.appendChild(fly);
+			var skyx = 0;
+			var skyt = 0;
+			var c;
+			var j;
+			document.onmousemove = function(e) {
+				var fly = document.getElementById('fly');
+				var contentx = fly.offsetLeft + fly.offsetWidth / 2;
+				var contenty = fly.offsetTop + fly.offsetHeight / 2;
+				var dx = e.clientX - contentx;
+				var dt = e.clientY - contenty;
+				c = Math.atan2(dx, dt); //取值
+				c = 180 * c / Math.PI; //转换角度
+				c = c * -1; //console.log(c);
+				function to() { //飞机运动
+					clearTimeout(j);
+					fly.style.transform = 'rotate(' + c + 'deg)';
+					switch (true) {
+						case c < 15 && c > -15: //向下飞
+							skyt -= 5;
+							document.body.style.backgroundPositionY = skyt + 'px';
+							break;
+						case c > 15 && c < 75: //向左下角飞
+							skyx += 3;
+							skyt -= 3;
+							document.body.style.backgroundPositionX = skyx + 'px';
+							document.body.style.backgroundPositionY = skyt + 'px';
+							break;
+						case c > 75 && c < 105: //向左飞
+							skyx += 5;
+							document.body.style.backgroundPositionX = skyx + 'px';
+							break;
+						case c > 105 && c < 165: //向左上角飞
+							skyx += 3;
+							skyt += 3;
+							document.body.style.backgroundPositionX = skyx + 'px';
+							document.body.style.backgroundPositionY = skyt + 'px';
+							break;
+						case c > 165 || c < -165: //向上飞
+							skyt += 5;
+							document.body.style.backgroundPositionY = skyt + 'px';
+							break;
+						case c < -15 && c > -75: //向右下角飞
+							skyx -= 3;
+							skyt -= 3;
+							document.body.style.backgroundPositionX = skyx + 'px';
+							document.body.style.backgroundPositionY = skyt + 'px';
+							break;
+						case c < -75 && c > -105: //向右飞
+							skyx -= 5;
+							document.body.style.backgroundPositionX = skyx + 'px';
+							break;
+						case c < -105 && c > -165: //向右上角飞
+							skyx -= 3;
+							skyt += 3;
+							document.body.style.backgroundPositionX = skyx + 'px';
+							document.body.style.backgroundPositionY = skyt + 'px';
+							break;
+					}
+					j = setTimeout(to, 10);
+				}
+				to();
+			}
+		</script>
+	</body>
+</html>
